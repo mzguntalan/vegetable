@@ -1,5 +1,5 @@
 from carrot.vector_graphic import VectorGraphic
-from typing import List, Optional, Iterable
+from typing import List, Optional, Iterator
 
 
 class Glyph(VectorGraphic):
@@ -8,7 +8,7 @@ class Glyph(VectorGraphic):
         glyph_name: str,
         vector_graphic_of_the_glyph: Optional[VectorGraphic] = None,
         sequence_of_segments_that_make_up_the_glyph: Optional[
-            Iterable[VectorGraphic]
+            Iterator[VectorGraphic]
         ] = None,
     ):
         if (
