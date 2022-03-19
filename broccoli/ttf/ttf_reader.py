@@ -24,7 +24,7 @@ class TTFReader:
 
     def read_font(
         self,
-        path_to_ttf_font_file: str,
+        path_to_ttf_font_file: str or Path,
         path_to_save_temporary_files_that_will_get_deleted_after_reading: str = "../tmp",
     ) -> Font:
         path_to_ttf_font_file = Path(path_to_ttf_font_file)
@@ -69,9 +69,8 @@ class TTFReader:
         return ttglyph.attrib["name"]
 
     def _get_glyph_from_ttglyph(self, ttglyph):
-        get_ttcontours_of_ttglyph = lambda g: g.findall("contour")
         get_ttpoints_in_ttcontour = lambda ttcontour: ttcontour.findall("pt")
-        get_point_from_ttpoint_bounded_by_min_and_max = lambda ttpoint: Point(
+        get_point_from_ttpoint = lambda ttpoint: Point(
             x=float(ttpoint.attrib["x"]),
             y=float(ttpoint.attrib["y"]),
             h=float(ttpoint.attrib["on"]),
@@ -79,13 +78,13 @@ class TTFReader:
 
         get_contour_from_ttcontour = lambda ttcontour: Contour(
             map(
-                get_point_from_ttpoint_bounded_by_min_and_max,
+                get_point_from_ttpoint,
                 get_ttpoints_in_ttcontour(ttcontour),
             )
         )
 
         glyph_name = self._get_name_of_ttglyph(ttglyph)
-        ttcontours = get_ttcontours_of_ttglyph(ttglyph)
+        ttcontours = ttglyph.findall("contour")
         contours = map(get_contour_from_ttcontour, ttcontours)
         vector_graphics = map(
             lambda c: self._get_vector_graphic_from_contour(c), contours
