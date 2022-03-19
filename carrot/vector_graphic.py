@@ -1,6 +1,6 @@
 from functools import reduce
 from itertools import tee, count, repeat
-from typing import Tuple, Optional, Callable, Iterable
+from typing import Tuple, Optional, Callable, Iterator
 import operator
 
 
@@ -78,7 +78,7 @@ class VectorGraphic:
         z_1: float,
         num_points_for_approximation: Optional[int] = None,
         include_last_point: Optional[bool] = False,
-    ) -> Iterable:
+    ) -> Iterator[Tuple[float, float]]:
         num_points_for_approximation = (
             num_points_for_approximation or self._num_points_for_approximation
         )
@@ -103,7 +103,7 @@ class VectorGraphic:
         self,
         num_points_for_approximation: Optional[int] = None,
         include_last_point: Optional[bool] = False,
-    ) -> Iterable:
+    ) -> Iterator[Tuple[float, float]]:
         return self._get_as_point_sequence_between(
             lambda x: self(x),
             0,
@@ -159,10 +159,8 @@ class VectorGraphic:
         )
 
     def __add__(self, other: "VectorGraphic") -> "VectorGraphic":
-        lengths, total_length = tee(
-            map(lambda vg: vg.get_approximate_length(), [self, other])
-        )
-        total_length = sum(total_length)
+        lengths = list(map(lambda vg: vg.get_approximate_length(), [self, other]))
+        total_length = sum(lengths)
         normalized_lengths = list(map(operator.truediv, lengths, repeat(total_length)))
 
         combined_vg_f_portion_of_s = (
