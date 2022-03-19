@@ -1,9 +1,9 @@
-from typing import Dict, List, Iterable
+from typing import Dict, List, Iterator
 from broccoli.glyph import Glyph
 
 
 class Font:
-    def __init__(self, font_name: str, glyphs: Iterable[Glyph]):
+    def __init__(self, font_name: str, glyphs: Iterator[Glyph]):
         self._font_name = font_name
         self._glyphs = {glyph.name: glyph for glyph in glyphs}
 
