@@ -27,6 +27,9 @@ class Point:
     def __repr__(self):
         return str((self.x, self.y, self.h))
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y and self.h == other.h
+
 
 class Contour:
     def __init__(self, point_sequence: Iterator[Point]):
@@ -58,6 +61,10 @@ class Contour:
         else:
             if last_point.is_off():
                 point_sequence = point_sequence + [first_point]
+
+        first_point, last_point = point_sequence[0], point_sequence[-1]
+        if last_point != first_point:
+            point_sequence = point_sequence + [first_point]
 
         return iter(point_sequence)
 
