@@ -133,4 +133,4 @@ dmypy.json
 *.pytest_cache
 
 # Project
-.data/
+/data/
