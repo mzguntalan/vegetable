@@ -17,10 +17,12 @@ class TTFReader:
     def __init__(
         self,
         glyph_names_to_read_in_font_files: Iterator[str],
-        num_points_for_approximation: int,
+        num_points_for_glyph_as_sequence: int = 128,
+        num_points_for_internal_approximation: int = 2,
     ):
         self._glyph_names = glyph_names_to_read_in_font_files
-        self._num_points_for_approximation = num_points_for_approximation
+        self._num_points_for_glyph_as_sequence = num_points_for_glyph_as_sequence
+        self._num_points_for_approximation = num_points_for_internal_approximation
 
     def read_font(
         self,
@@ -55,7 +57,7 @@ class TTFReader:
         )
 
     def _get_font_from_glyphs(self, font_name: str, glyphs: Iterator[Glyph]) -> Font:
-        return Font(font_name, glyphs)
+        return Font(font_name, glyphs, self._num_points_for_glyph_as_sequence)
 
     def _get_glyphs_from_font_xml(self, font_xml: ElementTree) -> Iterator[Glyph]:
         root_of_xml = font_xml.getroot()
