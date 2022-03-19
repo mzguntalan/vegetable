@@ -1,6 +1,5 @@
-from typing import Iterable, List, Optional, Tuple
+from typing import List, Optional, Tuple, Iterator
 from itertools import chain
-from unittest.mock import sentinel
 
 
 class Point:
@@ -30,75 +29,70 @@ class Point:
 
 
 class Contour:
-    def __init__(self, point_sequence: Iterable[Point]):
+    def __init__(self, point_sequence: Iterator[Point]):
         self._point_sequence = self._decompress(point_sequence)
 
     @property
-    def point_sequence(self):
-        return self._point_sequence
+    def point_sequence(self) -> Iterator[Point]:
+        return iter(self._point_sequence)
 
-    def _decompress(self, point_sequence: Iterable[Point]) -> Iterable[Point]:
+    def _decompress(self, point_sequence: Iterator[Point]) -> Iterator[Point]:
         return self._remove_off_off_sequence_of_points_by_putting_an_on_point_in_between_them(
             self._fix_end_points(point_sequence)
         )
 
-    def _fix_end_points(self, point_sequence: Iterable[Point]) -> List[Point]:
+    def _fix_end_points(self, point_sequence: Iterator[Point]) -> Iterator[Point]:
         point_sequence = list(point_sequence)
         first_point, last_point = point_sequence[0], point_sequence[-1]
 
-        copy_last_point_to_the_beginning_of_sequence = (
-            lambda sequence: [sequence[-1]] + sequence
-        )
-        put_point_in_beginning_and_last_of_sequence = (
-            lambda point, sequence: [point] + sequence + [point]
-        )
-
         if first_point.is_off():
             if last_point.is_on():
-                point_sequence = copy_last_point_to_the_beginning_of_sequence(
-                    point_sequence
-                )
+                point_sequence = [last_point] + point_sequence
             else:
                 virtual_point_in_between = (first_point + last_point) / 2
-                point_sequence = put_point_in_beginning_and_last_of_sequence(
-                    point=virtual_point_in_between, sequence=point_sequence
+                point_sequence = (
+                    [virtual_point_in_between]
+                    + point_sequence
+                    + [virtual_point_in_between]
                 )
+        else:
+            if last_point.is_off():
+                point_sequence = point_sequence + [first_point]
 
-        first_point, last_point = point_sequence[0], point_sequence[-1]
-        if last_point != first_point:
-            point_sequence.append(first_point)
-
-        return point_sequence
+        return iter(point_sequence)
 
     def _remove_off_off_sequence_of_points_by_putting_an_on_point_in_between_them(
         self,
-        point_sequence: Iterable[Point],
-        point_sequence_with_no_successive_off_points: Iterable[Point] = (),
-        last_point_added_to_no_successive_off_points: Optional[Point] = None,
-    ) -> Iterable[Point]:
-        point_sequence = iter(point_sequence)
-        incoming_point = next(point_sequence, None)
-        if incoming_point is None:
-            return point_sequence_with_no_successive_off_points
+        point_sequence: Iterator[Point],
+        sequence_with_no_successive_off_points: Iterator[Point] = iter([]),
+        last_point_added: Optional[Point] = None,
+    ) -> Iterator[Point]:
+        point = next(point_sequence, None)
+        if not point:
+            return sequence_with_no_successive_off_points
 
-        if last_point_added_to_no_successive_off_points is None:
+        if not last_point_added:
             return self._remove_off_off_sequence_of_points_by_putting_an_on_point_in_between_them(
                 point_sequence,
-                point_sequence_with_no_successive_off_points=chain(
-                    point_sequence_with_no_successive_off_points, iter([incoming_point])
-                ),
-                last_point_added_to_no_successive_off_points=incoming_point,
+                chain(sequence_with_no_successive_off_points, iter([point])),
+                point,
             )
-
-        virtual_on_point_in_between = (
-            incoming_point + last_point_added_to_no_successive_off_points
-        ) / 2
-
-        return self._remove_off_off_sequence_of_points_by_putting_an_on_point_in_between_them(
-            point_sequence,
-            point_sequence_with_no_successive_off_points=chain(
-                point_sequence_with_no_successive_off_points,
-                iter([virtual_on_point_in_between, incoming_point]),
-            ),
-            last_point_added_to_no_successive_off_points=incoming_point,
-        )
+        if point.is_off() and last_point_added.is_off():
+            virtual_on_point_in_between = (point + last_point_added) / 2
+            return self._remove_off_off_sequence_of_points_by_putting_an_on_point_in_between_them(
+                point_sequence,
+                chain(
+                    sequence_with_no_successive_off_points,
+                    iter([virtual_on_point_in_between, point]),
+                ),
+                point,
+            )
+        else:
+            return self._remove_off_off_sequence_of_points_by_putting_an_on_point_in_between_them(
+                point_sequence,
+                chain(
+                    sequence_with_no_successive_off_points,
+                    iter([point]),
+                ),
+                point,
+            )
