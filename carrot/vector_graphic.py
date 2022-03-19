@@ -12,6 +12,7 @@ class VectorGraphic:
         f_t: Optional[Callable[[float], Tuple[float, float]]] = None,
         f_portion_s: Optional[Callable[[float], Tuple[float, float]]] = None,
         num_points_for_approximation: Optional[int] = 10,
+        approximate_length: Optional[float] = None,
     ):
         self._start_point = start_point
         self._end_point = end_point
@@ -25,6 +26,10 @@ class VectorGraphic:
             self._f_portion_s = self._make_f_portion_s_from_f_t(f_t)
 
         self._num_points_for_approximation = num_points_for_approximation
+        if approximate_length is not None:
+            self._approximate_length = approximate_length
+        else:
+            self._approximate_length = self._get_approximate_length()
 
     @property
     def num_points_for_approximation(self) -> int:
@@ -151,9 +156,18 @@ class VectorGraphic:
     ) -> float:
         return self._get_approximate_length_between(f, 0, z)
 
+    def _get_approximate_length(
+        self, num_points_for_approximation: Optional[int] = None
+    ) -> float:
+        return self._get_approximate_length_between(
+            self._f_portion_s, 0, 1, num_points_for_approximation
+        )
+
     def get_approximate_length(
         self, num_points_for_approximation: Optional[int] = None
     ) -> float:
+        if num_points_for_approximation is None:
+            return self._approximate_length
         return self._get_approximate_length_between(
             self._f_portion_s, 0, 1, num_points_for_approximation
         )
@@ -175,6 +189,8 @@ class VectorGraphic:
             f_portion_s=combined_vg_f_portion_of_s,
             num_points_for_approximation=self._num_points_for_approximation
             + other._num_points_for_approximation,
+            approximate_length=self.get_approximate_length()
+            + other.get_approximate_length(),
         )
 
         return sum_vg
