@@ -58,8 +58,8 @@ class VectorGraphic:
         self,
         f: Callable[[float], Tuple[float, float]],
         arc_length: float,
-        tolerance_decimal_place: Optional[int] = 3,
-        max_depth_search: Optional[int] = 20,
+        tolerance_decimal_place: Optional[int] = 2,
+        max_depth_search: Optional[int] = 10,
     ) -> float:
         arc_length_rounded = round(arc_length, tolerance_decimal_place)
 

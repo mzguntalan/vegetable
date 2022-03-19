@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Callable, Optional
 
 from carrot.vector_graphic import VectorGraphic
 
@@ -16,7 +16,7 @@ class Line(VectorGraphic):
         super().__init__(
             start_point,
             end_point,
-            f_t=f,
+            f_portion_s=f,
             num_points_for_approximation=num_points_for_approximation,
         )
 
