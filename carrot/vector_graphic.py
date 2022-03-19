@@ -180,3 +180,6 @@ class VectorGraphic:
         )
 
         return sum_vg
+
+    def __repr__(self):
+        return f"VectorGraphic: {self._start_point} -> {self._end_point}"

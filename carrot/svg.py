@@ -20,6 +20,9 @@ class Line(VectorGraphic):
             num_points_for_approximation=num_points_for_approximation,
         )
 
+    def __repr__(self):
+        return f"Line: {self._start_point} -> {self._end_point}"
+
 
 class QuadraticCurve(VectorGraphic):
     def __init__(
@@ -46,3 +49,8 @@ class QuadraticCurve(VectorGraphic):
             f_t=f,
             num_points_for_approximation=num_points_for_approximation,
         )
+
+        self._control_point = control_point
+
+    def __repr__(self):
+        return f"QCurve: {self._start_point} --> ({self._control_point}) -> {self._end_point}"
