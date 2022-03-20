@@ -7,6 +7,15 @@ Remark:
 Motivation:
 - machine learning on vector graphics using point cloud representations
 
+This is a B rendered from 0 points to 128 points.
+
+![animated-B-going-from-0-to-128-points](demo/animated_B.gif)
+
+These are glyphs of a certain font rendered as a point sequence.
+
+![animated-B-going-from-0-to-128-points](demo/glyph_as_point_sequence.png)
+
+
 # carrot
 This package contains a basis for handling vector graphics. 
 It provides the powerful class called `VectorGraphic` which is
