@@ -127,7 +127,7 @@ This reader works by reading the `ttf` and finding the `ttglyfs` that you specif
 curves (encoded as a sequence of on and off points) and each of those is converted as a `VectorGraphic` object. 
 Then, the glyph is then just the sum of all these `VectorGraphic` objects.
 
-# How `VectorGraphic` takes a generic parameterization and produces a parameterization using portion of arc length
+# Reparameterization to `portion_s`
 Given a parametrization of a curve in 2d: `f(t:float)=(x,y)` where t in `[0,1]`, we first derive `g(s)` where `s` is the arc length - reparameterization to arc length. To do this we need to solve for `t` in terms of `s` then replace t in `f(t)` to get a new function `g(s)=f(t_in_terms_of_s)`. 
 
 The arc length from `t=0` to some `t=t` is given by the integral below
