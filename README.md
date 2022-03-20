@@ -131,7 +131,7 @@ Then, the glyph is then just the sum of all these `VectorGraphic` objects.
 Given a parametrization of a curve in 2d: `f(t:float)=(x,y)` where t in `[0,1]`, we first derive `g(s)` where `s` is the arc length - reparameterization to arc length. To do this we need to solve for `t` in terms of `s` then replace t in `f(t)` to get a new function `g(s)=f(t_in_terms_of_s)`. 
 
 The arc length from `t=0` to some `t=t` is given by the integral below
-$$ s(t) = \int_0^t |f'(t)| dt $$
+$ s(t) = \int_0^t |f'(t)| dt $
 
 At this, point, we should realize that for a line, the above integral is easy, but even for a parabola (a quadratic curve) it has no closed form, and therefore t in terms of s also has no closed form.
 
