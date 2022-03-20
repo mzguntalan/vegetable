@@ -1,7 +1,7 @@
 from itertools import chain
 from fontTools.ttLib import TTFont
 from xml.etree import ElementTree
-from typing import Iterator
+from typing import Iterator, Iterable
 from pathlib import Path
 from os.path import isabs
 from broccoli.glyph import Glyph
@@ -16,7 +16,7 @@ from functools import reduce
 class TTFReader:
     def __init__(
         self,
-        glyph_names_to_read_in_font_files: Iterator[str],
+        glyph_names_to_read_in_font_files: Iterable[str],
         num_points_for_glyph_as_sequence: int = 128,
         num_points_for_internal_approximation: int = 2,
     ):
