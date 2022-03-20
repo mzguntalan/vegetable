@@ -147,10 +147,10 @@ Now that we have reparameterized `f` with `s` as the arc length, we now proceed 
 Combining all of these yields: `h(portion_s)=g(portion_s*L)=f(t(portion_s*L))`, for simplicity we just call this `f(portion_s)`.
 
 # Adding of Vector Graphics
-At this point, we can think of a `VectorGraphic` object as simply `f(portion_s)`. If we have have two vector graphics `left` and `right` that we want to add as `sum = left + right` (addition does not commute for vector graphics), we can come up with a reasonable way to combine them on the basis of their lengths. 
+At this point, we can think of a `VectorGraphic` object as simply `f(portion_s)`. If we have two vector graphics `left` and `right` that we want to add as `sum = left + right` (addition does not commute for vector graphics), we can come up with a reasonable way to combine them on the basis of their lengths. 
 
 Remember that `portion_s` will be inside `[0,1]` for any vector graphic. An intuitive addition for `left` and `right` is that: 
-- `sum(0)` to `sum(m)` produces `left(0)` to `left(1)
+- `sum(0)` to `sum(m)` produces `left(0)` to `left(1)`
 - `sum(m)` to `sum(1)` produces `right(0)` to `right(1)`
 In words, this means, that if you travel along `sum`, you will first travel along `left` then at some point you switch to traveling along `right`. 
 
