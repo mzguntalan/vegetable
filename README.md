@@ -96,6 +96,11 @@ This package uses `carrot` in order to deliver the following.
 - `Font` class that has a name, and a `__call__(glyph_name)` that returns a `Glyph` object if the glyph exists, and raises a `KeyError`, otherwise.
 - `Glyph` class which is a `VectorGraphic` object and has an additional name property
 
+## Motivation
+`broccoli` was made to fill the needs that I had in the past, for which I could'nt find good solutions for. The solutions i had were hard to engineer and has perfomance issues because it was wildly different solutions stuck together - even then, the resulting point clouds were not as neat. 
+
+The TTF Reader that broccoli provides can read a ttf font file for 52 glyphs (a-z, A-Z) in about `0.5s`. This reader can also serves as an example how the `carrot` package can be used - other use cases can be `otf` font files, `svg` files, and others. 
+
 ## Demo
 Say you have a `ttf` file somewhere and you want to get the glyphs A,B,a,b and you want to make point clouds out of them.
 
@@ -115,7 +120,7 @@ for glyph_name in glyphs_you_want:
     point_cloud[glyph.name] = list(glyph.get_as_point_sequence())
 ```
 
-Additionally, you can make numpy arrays from them with the coordinates scaled from -1 to 1 (which is preferred for machine learning).
+Additionally, you can make numpy arrays from them with the coordinates scaled from -1 to 1 (which is useful for machine learning).
 ```python
 from broccoli.utils.font_to_numpy import font_to_numpy
 
@@ -127,7 +132,8 @@ This reader works by reading the `ttf` and finding the `ttglyfs` that you specif
 curves (encoded as a sequence of on and off points) and each of those is converted as a `VectorGraphic` object. 
 Then, the glyph is then just the sum of all these `VectorGraphic` objects.
 
-# Reparameterization to `portion_s`
+# Technical details for `carrot`
+## Reparameterization to `portion_s`
 Given a parametrization of a curve in 2d: `f(t:float)=(x,y)` where t in `[0,1]`, we first derive `g(s)` where `s` is the arc length - reparameterization to arc length. To do this we need to solve for `t` in terms of `s` then replace t in `f(t)` to get a new function `g(s)=f(t_in_terms_of_s)`. 
 
 The arc length from `t=0` to some `t=t` is given by the integral below
@@ -146,7 +152,7 @@ Now that we have reparameterized `f` with `s` as the arc length, we now proceed 
 
 Combining all of these yields: `h(portion_s)=g(portion_s*L)=f(t(portion_s*L))`, for simplicity we just call this `f(portion_s)`.
 
-# Adding of Vector Graphics
+## Adding of Vector Graphics
 At this point, we can think of a `VectorGraphic` object as simply `f(portion_s)`. If we have two vector graphics `left` and `right` that we want to add as `sum = left + right` (addition does not commute for vector graphics), we can come up with a reasonable way to combine them on the basis of their lengths. 
 
 Remember that `portion_s` will be inside `[0,1]` for any vector graphic. An intuitive addition for `left` and `right` is that: 
