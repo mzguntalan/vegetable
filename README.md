@@ -81,14 +81,14 @@ new_vg = vg + curve
 
 The result is itself a vector graphic.
 No the result is not a collection of the two - there is no list that collects the pieces together - the new vector graphic
-is itself a `VectorGraphic` object which means it defines its shape by `f_portion_s` - this means that it doesn't know 
-it was composed of smaller segments. 
+is itself a `VectorGraphic` object which means it defines its shape by `f_portion_s`; this means that it doesn't know 
+it was composed of smaller segments and it acts just like any other vector graphic. 
 
 Another cool feature is that you don't need the smaller pieces to be connected (connected means: end point of the first == start point of the second). 
-So you can create entire logos, figures, with all just 1 vector graphic.
+So you can create entire logos, figures, with all just 1 vector graphic object.
 
 This feature wherein the sum of 2 vector graphics is also a vector graphic allows it to be rendered as a point sequence where
-the points are equally spaced.
+the adjacent points are equally spaced.
 
 # broccoli
 This package uses `carrot` in order to deliver the following.
@@ -99,7 +99,7 @@ This package uses `carrot` in order to deliver the following.
 ## Demo
 Say you have a `ttf` file somewhere and you want to get the glyphs A,B,a,b and you want to make point clouds out of them.
 
-You first read the font to the get a `Font` object back.
+You first read the font to the get a `Font` object back. After that, you can access the glyphs in the font.
 ```python
 from broccoli.ttf.ttf_reader import TTFReader
 font_file_path = "/somewhere/out/there/font_name-italic.ttf"
@@ -123,6 +123,6 @@ font_as_numpy_array = font_to_numpy(font)
 ```
 
 ### Insight to how this reader works
-This reader works by viewing the `ttf` file as `ttx` and finding the contours of a glpyh. Each contour is a sequence 
-curves and each of those is converted as a `VectorGraphic` object. Then, the glyph is then just a summation of all 
-these `VectorGraphic` objects.
+This reader works by reading the `ttf` and finding the `ttglyfs` that you specified. For each of those glyph specification it then finds the contours of a glpyh. Each contour is a sequence of lines or
+curves (encoded as a sequence of on and off points) and each of those is converted as a `VectorGraphic` object. 
+Then, the glyph is then just the sum of all these `VectorGraphic` objects.
