@@ -168,3 +168,12 @@ We now determine an intuitive `m`. If `left` was just as long as `right`, then t
 Right now it is helpful to notice that we are intuitively passing `portion_s` in `sum`, so `z` will be `portion_s`.
 
 The last part is figuring out `k` and `j`. 
+
+We know that `k(0) = 0` and `k(m)=1`, a natural(linear) solution would just be `k(z) = z/m`, then in a similar fashion we set `j(z) = (z-m)/(1-m)` (j(m)=0, j(1)=1).
+
+Finally, putting them together:
+```
+sum(z) = left(z/m) if z in [0,m]
+         right((z-m)/(1-m)) else
+```
+where `z` is `portion_s` and `m=len(left)/(len(left)+len(right))`.
