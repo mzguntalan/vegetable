@@ -183,3 +183,15 @@ sum(z) = left(z/m) if z in [0,m]
          right((z-m)/(1-m)) else
 ```
 where `z` is `portion_s` and `m=len(left)/(len(left)+len(right))`.
+
+# Author Details and Citing this project
+If you use this project, please cite it as follows. Thank you.
+
+```shell
+@software{Untalan_Vector_Graphics_Vegetable_2022,
+  author = {Untalan, Marko Zolo G.},
+  title = {{Vegetable}},
+  url = {https://github.com/mzguntalan/vegetable},
+  year = {2022}
+}
+```
